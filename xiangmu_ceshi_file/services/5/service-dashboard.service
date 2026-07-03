@@ -1,0 +1,21 @@
+[Unit]
+Description=G1D service_dashboard Service
+After=network.target multi-user.target
+Wants=g1d-control-api.service
+StartLimitBurst=3
+StartLimitIntervalSec=60
+
+[Service]
+Type=simple
+User=__G1D_USER__
+WorkingDirectory=__G1D_HOME__
+
+ExecStartPre=/bin/sleep 30
+ExecStart=/usr/bin/python3 __G1D_HOME__/bin/service_dashboard.py
+Restart=on-failure
+RestartSec=10
+# SIGTERM 后最多等 15 秒，超时则 SIGKILL
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target
